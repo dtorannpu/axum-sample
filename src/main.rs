@@ -31,6 +31,7 @@ async fn main() -> Result<()> {
                 .on_response(
                     DefaultOnResponse::new()
                         .level(Level::INFO)
+                        .include_headers(true)
                         .latency_unit(LatencyUnit::Millis),
                 ),
         );
