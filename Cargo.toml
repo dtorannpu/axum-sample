@@ -4,14 +4,14 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-anyhow = "1.0.100"
-axum = "0.8.7"
-opentelemetry = "0.31.0"
-opentelemetry_sdk = { version = "0.31.0", features = ["trace"] }
-tokio = { version = "1.48.0", features = ["full"] }
-tracing = "0.1.43"
-tracing-opentelemetry = "0.32.0"
-tracing-subscriber = { version = "0.3.22" }
+anyhow = { version = "1.0.100", default-features = false }
+axum = { version = "0.8.7", features = ["http1", "tokio"], default-features = false }
+opentelemetry = { version = "0.31.0", default-features = false }
+opentelemetry_sdk = { version = "0.31.0", default-features = false }
+tokio = { version = "1.48.0", features = ["rt-multi-thread"] }
+tracing = { version = "0.1.43", default-features = false }
+tracing-opentelemetry = { version = "0.32.0", default-features = false }
+tracing-subscriber = { version = "0.3.22", features = ["fmt"], default-features = false }
 opentelemetry-semantic-conventions = { version = "0.31.0", features = ["semconv_experimental"] }
-opentelemetry-otlp = { version = "0.31.0", features = ["grpc-tonic"] }
-tower-http = { version="0.6.8", features = ["trace"] }
+opentelemetry-otlp = { version = "0.31.0", features = ["grpc-tonic", "trace"], default-features = false }
+tower-http = { version = "0.6.8", features = ["trace"] }
