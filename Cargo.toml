@@ -8,7 +8,7 @@ anyhow = { version = "1.0.100", default-features = false }
 axum = { version = "0.8.7", features = ["http1", "tokio"], default-features = false }
 opentelemetry = { version = "0.31.0", default-features = false }
 opentelemetry_sdk = { version = "0.31.0", default-features = false }
-tokio = { version = "1.48.0", features = ["rt-multi-thread"] }
+tokio = { version = "1.48.0", features = ["rt-multi-thread", "signal"] }
 tracing = { version = "0.1.43", default-features = false }
 tracing-opentelemetry = { version = "0.32.0", default-features = false }
 tracing-subscriber = { version = "0.3.22", features = ["fmt"], default-features = false }
