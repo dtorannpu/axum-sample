@@ -1,0 +1,10 @@
+[tasks.test-ci]
+run_task = "test"
+
+[tasks.clippy-ci]
+command = "cargo"
+args = ["clippy", "--", "--no-deps", "-Dwarnings"]
+
+[tasks.fmt]
+command = "cargo"
+args = ["fmt", "--all", "${@}"]
