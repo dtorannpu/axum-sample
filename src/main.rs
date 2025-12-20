@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use axum::http::Request;
 use axum::{Router, routing::get};
 use opentelemetry::KeyValue;
 use opentelemetry::trace::TracerProvider;
@@ -10,7 +11,7 @@ use opentelemetry_semantic_conventions::{
 };
 use std::net::{Ipv4Addr, SocketAddr};
 use tower_http::LatencyUnit;
-use tower_http::trace::{DefaultMakeSpan, DefaultOnRequest, DefaultOnResponse, TraceLayer};
+use tower_http::trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetryLayer;
 use tracing_subscriber::layer::SubscriberExt;
@@ -25,7 +26,19 @@ async fn main() -> Result<()> {
         .route("/sample", get(sample));
     let app = router.layer(
         TraceLayer::new_for_http()
-            .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
+            .make_span_with(|request: &Request<_>| {
+                let name = format!("{} {}", request.method(), request.uri());
+
+                tracing::span!(
+                    Level::INFO,
+                    "request",
+                    otel.name = name,
+                    method = %request.method(),
+                    uri = %request.uri(),
+                    headers = ?request.headers(),
+                    version = ?request.version(),
+                )
+            })
             .on_request(DefaultOnRequest::new().level(Level::INFO))
             .on_response(
                 DefaultOnResponse::new()
