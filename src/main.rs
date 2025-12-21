@@ -1,6 +1,7 @@
 use anyhow::{Context, Result};
+use api::route::v1;
+use axum::Router;
 use axum::http::Request;
-use axum::{Router, routing::get};
 use opentelemetry::KeyValue;
 use opentelemetry::trace::TracerProvider;
 use opentelemetry_sdk::Resource;
@@ -21,9 +22,7 @@ use tracing_subscriber::util::SubscriberInitExt;
 async fn main() -> Result<()> {
     let tracer_provider = init_tracing_subscriber()?;
 
-    let router = Router::new()
-        .route("/", get(root))
-        .route("/sample", get(sample));
+    let router = Router::new().merge(v1::routes());
     let app = router.layer(
         TraceLayer::new_for_http()
             .make_span_with(|request: &Request<_>| {
@@ -138,12 +137,4 @@ async fn shutdown_signal(tracer_provider: SdkTracerProvider) {
             purge_spans(&tracer_provider);
         },
     }
-}
-
-async fn root() -> &'static str {
-    "Hello, World!"
-}
-
-async fn sample() -> &'static str {
-    "Hello, Sample!"
 }
