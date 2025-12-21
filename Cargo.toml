@@ -26,6 +26,7 @@ tracing-subscriber = { version = "0.3.22", features = ["fmt"], default-features 
 opentelemetry-semantic-conventions = { version = "0.31.0", features = ["semconv_experimental"] }
 opentelemetry-otlp = { version = "0.31.0", features = ["grpc-tonic", "trace"], default-features = false }
 tower-http = { version = "0.6.8", features = ["trace"] }
+rstest = { version = "0.26.1", default-features = false }
 
 [dependencies]
 api.workspace = true
