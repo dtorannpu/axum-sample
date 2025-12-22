@@ -9,7 +9,7 @@ use tower::ServiceExt;
 async fn show_sample() -> anyhow::Result<()> {
     let app = v1::routes();
 
-    let req = Request::builder().uri("/v1").body(Body::empty())?;
+    let req = Request::builder().uri("/v1/sample").body(Body::empty())?;
     let resp = app.oneshot(req).await?;
 
     assert_eq!(resp.status(), 200);
