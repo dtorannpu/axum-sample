@@ -1,6 +1,6 @@
 use crate::model::sample::SampleRequest;
-use axum::http::StatusCode;
 use axum::Json;
+use axum::http::StatusCode;
 use axum_valid::Garde;
 
 pub async fn sample() -> &'static str {
