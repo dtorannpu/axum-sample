@@ -14,6 +14,10 @@ args = [
 [tasks.test-ci]
 run_task = "test"
 
+[tasks.clippy]
+command = "cargo"
+args = ["clippy", "--all", "--all-targets", "${@}"]
+
 [tasks.clippy-ci]
 command = "cargo"
 args = ["clippy", "--", "--no-deps", "-Dwarnings"]
@@ -21,3 +25,15 @@ args = ["clippy", "--", "--no-deps", "-Dwarnings"]
 [tasks.fmt]
 command = "cargo"
 args = ["fmt", "--all", "${@}"]
+
+[tasks.fmt-check]
+command = "cargo"
+args = ["fmt", "--all", "--check"]
+
+[tasks.pre-commit]
+description = "Run fmt and clippy before commit"
+dependencies = ["fmt-check", "clippy"]
+
+[tasks.check]
+description = "Format and lint"
+dependencies = ["fmt", "clippy"]
