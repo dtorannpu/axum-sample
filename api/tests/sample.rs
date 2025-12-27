@@ -29,7 +29,7 @@ async fn register_sample_ok() -> anyhow::Result<()> {
         .method("POST")
         .uri("/v1/sample")
         .header("content-type", "application/json")
-        .body(Body::from(r#"{"name": "test"}"#))?;
+        .body(Body::from(r#"{"name": "test", "age": 10}"#))?;
     let resp = app.oneshot(req).await?;
 
     assert_eq!(resp.status(), StatusCode::CREATED);
@@ -46,7 +46,7 @@ async fn register_sample_ng() -> anyhow::Result<()> {
         .method("POST")
         .uri("/v1/sample")
         .header("content-type", "application/json")
-        .body(Body::from(r#"{"name": ""}"#))?;
+        .body(Body::from(r#"{"name": "", "age": 10}"#))?;
     let resp = app.oneshot(req).await?;
 
     assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
