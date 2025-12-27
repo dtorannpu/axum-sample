@@ -6,7 +6,11 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
+shared.workspace = true
 axum.workspace = true
+serde.workspace = true
+garde.workspace = true
+axum-valid.workspace = true
 
 [dev-dependencies]
 rstest.workspace = true

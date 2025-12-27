@@ -6,7 +6,7 @@ publish.workspace = true
 license.workspace = true
 
 [workspace]
-members = ["api"]
+members = ["api", "shared"]
 
 [workspace.package]
 edition = "2024"
@@ -15,8 +15,9 @@ license = "MIT"
 
 [workspace.dependencies]
 api = { path = "./api" }
+shared = { path = "./shared" }
 anyhow = { version = "1.0.100", default-features = false }
-axum = { version = "0.8.7", features = ["http1", "tokio"], default-features = false }
+axum = { version = "0.8.7", features = ["http1", "tokio", "json"], default-features = false }
 opentelemetry = { version = "0.31.0", default-features = false }
 opentelemetry_sdk = { version = "0.31.0", default-features = false }
 tokio = { version = "1.48.0", features = ["rt-multi-thread", "signal"] }
@@ -28,6 +29,10 @@ opentelemetry-otlp = { version = "0.31.0", features = ["grpc-tonic", "trace"], d
 tower-http = { version = "0.6.8", features = ["trace"] }
 rstest = { version = "0.26.1", default-features = false }
 tower = { version = "0.5.2" }
+serde = { version = "1.0.228", features = ["derive"] }
+garde = { version = "0.22.1", features = ["derive"] }
+axum-valid = { version = "0.24.0" }
+thiserror = { version = "2.0.17" }
 
 [dependencies]
 api.workspace = true
@@ -42,3 +47,4 @@ tracing-subscriber.workspace = true
 opentelemetry-semantic-conventions.workspace = true
 opentelemetry-otlp.workspace = true
 tower-http.workspace = true
+
