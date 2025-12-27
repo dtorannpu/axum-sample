@@ -6,6 +6,6 @@ use serde::Deserialize;
 pub struct SampleRequest {
     #[garde(length(min = 1, max = 30))]
     pub name: String,
-    #[garde(range(min = 1, max = 100))]
+    #[garde(range(min = 0, max = 100))]
     pub age: u8,
 }
