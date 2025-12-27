@@ -31,7 +31,7 @@ rstest = { version = "0.26.1", default-features = false }
 tower = { version = "0.5.2" }
 serde = { version = "1.0.228", features = ["derive"] }
 garde = { version = "0.22.1", features = ["derive"] }
-axum-valid = { version = "0.24.0", features = ["garde"] }
+axum-valid = { version = "0.24.0", default-features = false, features = ["garde", "into_json"] }
 thiserror = { version = "2.0.17" }
 
 [dependencies]
