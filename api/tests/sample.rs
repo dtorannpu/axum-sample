@@ -15,7 +15,10 @@ async fn show_sample() -> anyhow::Result<()> {
     assert_eq!(resp.status(), StatusCode::OK);
 
     let body = axum::body::to_bytes(resp.into_body(), usize::MAX).await?;
-    assert_eq!(String::from_utf8(body.to_vec())?, "Hello, Sample!");
+    assert_eq!(
+        String::from_utf8(body.to_vec())?,
+        r#"{"samples":[{"name":"Sample","age":20},{"name":"Sample2","age":30}]}"#
+    );
 
     Ok(())
 }
