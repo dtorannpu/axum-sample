@@ -124,6 +124,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3881b4b05ede123ff3c82f41c63e47425443556365b47b2ba4d05098a5bd2645"
 dependencies = [
  "axum",
+ "garde",
  "validator",
 ]
 
