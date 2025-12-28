@@ -6,7 +6,7 @@ publish.workspace = true
 license.workspace = true
 
 [workspace]
-members = ["api", "shared"]
+members = ["api", "registry", "registry", "shared"]
 
 [workspace.package]
 edition = "2024"
@@ -15,8 +15,9 @@ license = "MIT"
 
 [workspace.dependencies]
 api = { path = "./api" }
+registry = { path = "./registry" }
 anyhow = { version = "1.0.100", default-features = false }
-axum = { version = "0.8.8", features = ["http1", "tokio"], default-features = false }
+axum = { version = "0.8.8", features = ["http1", "tokio", "macros"], default-features = false }
 opentelemetry = { version = "0.31.0", default-features = false }
 opentelemetry_sdk = { version = "0.31.0", default-features = false }
 tokio = { version = "1.48.0", features = ["rt-multi-thread", "signal"] }
@@ -32,8 +33,10 @@ serde = { version = "1.0.228", default-features = false, features = ["derive"] }
 garde = { version = "0.22.1", features = ["derive"] }
 axum-valid = { version = "0.24.0", default-features = false, features = ["garde", "json", "into_json"] }
 
+
 [dependencies]
 api.workspace = true
+registry.workspace = true
 anyhow.workspace = true
 axum.workspace = true
 opentelemetry.workspace = true

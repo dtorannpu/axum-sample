@@ -1,13 +1,16 @@
 use api::route::v1;
 use axum::body::Body;
 use axum::http::{Request, StatusCode};
+use registry::AppRegistry;
 use rstest::rstest;
 use tower::ServiceExt;
 
 #[rstest]
 #[tokio::test]
 async fn show_sample() -> anyhow::Result<()> {
-    let app = v1::routes();
+    let app = v1::routes().with_state(AppRegistry {
+        without_validation_arguments: (),
+    });
 
     let req = Request::builder().uri("/v1/sample").body(Body::empty())?;
     let resp = app.oneshot(req).await?;
@@ -26,7 +29,9 @@ async fn show_sample() -> anyhow::Result<()> {
 #[rstest]
 #[tokio::test]
 async fn register_sample_ok() -> anyhow::Result<()> {
-    let app = v1::routes();
+    let app = v1::routes().with_state(AppRegistry {
+        without_validation_arguments: (),
+    });
 
     let req = Request::builder()
         .method("POST")
@@ -43,7 +48,9 @@ async fn register_sample_ok() -> anyhow::Result<()> {
 #[rstest]
 #[tokio::test]
 async fn register_sample_ng() -> anyhow::Result<()> {
-    let app = v1::routes();
+    let app = v1::routes().with_state(AppRegistry {
+        without_validation_arguments: (),
+    });
 
     let req = Request::builder()
         .method("POST")

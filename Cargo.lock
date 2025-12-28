@@ -25,6 +25,7 @@ dependencies = [
  "axum",
  "axum-valid",
  "garde",
+ "registry",
  "rstest",
  "serde",
  "tokio",
@@ -55,6 +56,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b52af3cb4058c895d37317bb27508dccc8e5f2d39454016b297bf4a400597b8"
 dependencies = [
  "axum-core",
+ "axum-macros",
  "bytes",
  "futures-util",
  "http",
@@ -97,6 +99,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "axum-macros"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "604fde5e028fea851ce1d8570bbdc034bec850d157f7569d10f347d06808c05c"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "axum-sample"
 version = "0.1.0"
 dependencies = [
@@ -107,6 +120,7 @@ dependencies = [
  "opentelemetry-otlp",
  "opentelemetry-semantic-conventions",
  "opentelemetry_sdk",
+ "registry",
  "tokio",
  "tower-http",
  "tracing",
@@ -735,6 +749,13 @@ name = "regex-syntax"
 version = "0.8.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a2d987857b319362043e95f5353c0535c1f58eec5336fdfcf626430af7def58"
+
+[[package]]
+name = "registry"
+version = "0.1.0"
+dependencies = [
+ "axum",
+]
 
 [[package]]
 name = "relative-path"
