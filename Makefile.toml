@@ -37,3 +37,7 @@ dependencies = ["fmt-check", "clippy"]
 [tasks.check]
 description = "Format and lint"
 dependencies = ["fmt", "clippy"]
+
+[tasks.features-prune]
+command = "cargo"
+args = ["features", "prune"]

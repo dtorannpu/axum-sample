@@ -6,6 +6,3 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
-thiserror.workspace = true
-garde.workspace = true
-axum.workspace = true
