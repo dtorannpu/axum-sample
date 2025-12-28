@@ -1,6 +1,6 @@
 use crate::handler::sample;
-use axum::routing::{get, post};
 use axum::Router;
+use axum::routing::{get, post};
 use registry::AppState;
 
 pub fn build_sample_routers() -> Router<AppState> {

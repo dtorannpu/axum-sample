@@ -8,7 +8,7 @@ use tower::ServiceExt;
 #[rstest]
 #[tokio::test]
 async fn show_root() -> anyhow::Result<()> {
-    let app = v1::routes().with_state(AppState::new());
+    let app = v1::routes().with_state(AppState::default());
 
     let req = Request::builder().uri("/v1").body(Body::empty())?;
     let resp = app.oneshot(req).await?;

@@ -8,7 +8,7 @@ use tower::ServiceExt;
 #[rstest]
 #[tokio::test]
 async fn show_sample() -> anyhow::Result<()> {
-    let app = v1::routes().with_state(AppState::new());
+    let app = v1::routes().with_state(AppState::default());
 
     let req = Request::builder().uri("/v1/sample").body(Body::empty())?;
     let resp = app.oneshot(req).await?;
@@ -27,7 +27,7 @@ async fn show_sample() -> anyhow::Result<()> {
 #[rstest]
 #[tokio::test]
 async fn register_sample_ok() -> anyhow::Result<()> {
-    let app = v1::routes().with_state(AppState::new());
+    let app = v1::routes().with_state(AppState::default());
 
     let req = Request::builder()
         .method("POST")
@@ -44,7 +44,7 @@ async fn register_sample_ok() -> anyhow::Result<()> {
 #[rstest]
 #[tokio::test]
 async fn register_sample_ng() -> anyhow::Result<()> {
-    let app = v1::routes().with_state(AppState::new());
+    let app = v1::routes().with_state(AppState::default());
 
     let req = Request::builder()
         .method("POST")

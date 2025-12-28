@@ -1,19 +1,19 @@
 use anyhow::{Context, Result};
 use api::route::v1;
-use axum::http::Request;
 use axum::Router;
-use opentelemetry::trace::TracerProvider;
+use axum::http::Request;
 use opentelemetry::KeyValue;
-use opentelemetry_sdk::trace::{RandomIdGenerator, Sampler, SdkTracerProvider};
+use opentelemetry::trace::TracerProvider;
 use opentelemetry_sdk::Resource;
+use opentelemetry_sdk::trace::{RandomIdGenerator, Sampler, SdkTracerProvider};
 use opentelemetry_semantic_conventions::{
-    attribute::{DEPLOYMENT_ENVIRONMENT_NAME, SERVICE_VERSION},
     SCHEMA_URL,
+    attribute::{DEPLOYMENT_ENVIRONMENT_NAME, SERVICE_VERSION},
 };
 use registry::AppState;
 use std::net::{Ipv4Addr, SocketAddr};
-use tower_http::trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer};
 use tower_http::LatencyUnit;
+use tower_http::trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetryLayer;
 use tracing_subscriber::layer::SubscriberExt;
@@ -22,7 +22,7 @@ use tracing_subscriber::util::SubscriberInitExt;
 #[tokio::main]
 async fn main() -> Result<()> {
     let tracer_provider = init_tracing_subscriber()?;
-    let app_state = AppState::new();
+    let app_state = AppState::default();
     let router = Router::new().merge(v1::routes());
     let app = router
         .layer(

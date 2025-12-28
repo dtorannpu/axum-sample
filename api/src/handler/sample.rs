@@ -1,7 +1,7 @@
 use crate::model::sample::{SampleList, SampleRequest, SampleResponse};
+use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
-use axum::Json;
 use axum_valid::Garde;
 use registry::AppState;
 

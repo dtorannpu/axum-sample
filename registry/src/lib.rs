@@ -21,8 +21,8 @@ pub struct AppState {
     pub without_validation_arguments: (),
 }
 
-impl AppState {
-    pub fn new() -> Self {
+impl Default for AppState {
+    fn default() -> Self {
         Self {
             module: AppModule::new(),
             without_validation_arguments: (),
