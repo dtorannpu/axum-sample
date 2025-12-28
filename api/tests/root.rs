@@ -1,16 +1,14 @@
 use api::route::v1;
 use axum::body::Body;
 use axum::http::Request;
-use registry::AppRegistry;
+use registry::AppState;
 use rstest::rstest;
 use tower::ServiceExt;
 
 #[rstest]
 #[tokio::test]
 async fn show_root() -> anyhow::Result<()> {
-    let app = v1::routes().with_state(AppRegistry {
-        without_validation_arguments: (),
-    });
+    let app = v1::routes().with_state(AppState::new());
 
     let req = Request::builder().uri("/v1").body(Body::empty())?;
     let resp = app.oneshot(req).await?;

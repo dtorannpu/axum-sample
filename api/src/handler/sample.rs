@@ -1,11 +1,11 @@
 use crate::model::sample::{SampleList, SampleRequest, SampleResponse};
-use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
+use axum::Json;
 use axum_valid::Garde;
-use registry::AppRegistry;
+use registry::AppState;
 
-pub async fn sample(State(_registry): State<AppRegistry>) -> Json<SampleList> {
+pub async fn sample(State(_registry): State<AppState>) -> Json<SampleList> {
     Json(SampleList {
         samples: vec![
             SampleResponse {
@@ -21,7 +21,7 @@ pub async fn sample(State(_registry): State<AppRegistry>) -> Json<SampleList> {
 }
 
 pub async fn register(
-    State(_registry): State<AppRegistry>,
+    State(_registry): State<AppState>,
     Garde(Json(_)): Garde<Json<SampleRequest>>,
 ) -> StatusCode {
     StatusCode::CREATED

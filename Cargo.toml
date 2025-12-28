@@ -32,7 +32,7 @@ tower = { version = "0.5.2" }
 serde = { version = "1.0.228", default-features = false, features = ["derive"] }
 garde = { version = "0.22.1", features = ["derive"] }
 axum-valid = { version = "0.24.0", default-features = false, features = ["garde", "json", "into_json"] }
-
+shaku = { version = "0.6.2", features = ["derive"] }
 
 [dependencies]
 api.workspace = true

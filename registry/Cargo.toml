@@ -7,3 +7,4 @@ license.workspace = true
 
 [dependencies]
 axum.workspace = true
+shaku.workspace = true

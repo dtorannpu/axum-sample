@@ -1,5 +1,31 @@
 use axum::extract::FromRef;
-#[derive(Debug, Clone, FromRef)]
-pub struct AppRegistry {
+use shaku::module;
+use std::sync::Arc;
+
+module! {
+    pub AppModule {
+        components = [],
+        providers = []
+    }
+}
+
+impl AppModule {
+    pub fn new() -> Arc<Self> {
+        Arc::new(AppModule::builder().build())
+    }
+}
+
+#[derive(Clone, FromRef)]
+pub struct AppState {
+    pub module: Arc<AppModule>,
     pub without_validation_arguments: (),
+}
+
+impl AppState {
+    pub fn new() -> Self {
+        Self {
+            module: AppModule::new(),
+            without_validation_arguments: (),
+        }
+    }
 }
