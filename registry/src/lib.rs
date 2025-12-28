@@ -1,10 +1,11 @@
+use adapter::repository::sample::SampleRepositoryImpl;
 use axum::extract::FromRef;
 use shaku::module;
 use std::sync::Arc;
 
 module! {
     pub AppModule {
-        components = [],
+        components = [SampleRepositoryImpl],
         providers = []
     }
 }

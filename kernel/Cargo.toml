@@ -1,11 +1,10 @@
 [package]
-name = "registry"
+name = "kernel"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
 license.workspace = true
 
 [dependencies]
-adapter.workspace = true
-axum.workspace = true
+async-trait.workspace = true
 shaku.workspace = true

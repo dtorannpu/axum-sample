@@ -6,11 +6,13 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
+adapter.workspace = true
 registry.workspace = true
 axum.workspace = true
 serde.workspace = true
 garde.workspace = true
 axum-valid.workspace = true
+shaku.workspace = true
 
 [dev-dependencies]
 rstest.workspace = true

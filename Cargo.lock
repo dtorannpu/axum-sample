@@ -3,6 +3,16 @@
 version = 4
 
 [[package]]
+name = "adapter"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "derive-new",
+ "kernel",
+ "shaku",
+]
+
+[[package]]
 name = "aho-corasick"
 version = "1.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -27,6 +37,7 @@ checksum = "d301b3b94cb4b2f23d7917810addbbaff90738e0ca2be692bd027e70d7e0330c"
 name = "api"
 version = "0.1.0"
 dependencies = [
+ "adapter",
  "anyhow",
  "axum",
  "axum-valid",
@@ -34,6 +45,7 @@ dependencies = [
  "registry",
  "rstest",
  "serde",
+ "shaku",
  "tokio",
  "tower",
 ]
@@ -197,6 +209,17 @@ dependencies = [
  "ryu",
  "serde",
  "static_assertions",
+]
+
+[[package]]
+name = "derive-new"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2cdc8d50f426189eef89dac62fabfa0abb27d5cc008f25bf4156a0203325becc"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.111",
 ]
 
 [[package]]
@@ -495,6 +518,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "kernel"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "shaku",
+]
+
+[[package]]
 name = "lazy_static"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -760,6 +791,7 @@ checksum = "7a2d987857b319362043e95f5353c0535c1f58eec5336fdfcf626430af7def58"
 name = "registry"
 version = "0.1.0"
 dependencies = [
+ "adapter",
  "axum",
  "shaku",
 ]
