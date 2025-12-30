@@ -3,6 +3,7 @@ use api::route::v1;
 use async_trait::async_trait;
 use axum::body::Body;
 use axum::http::Request;
+use kernel::model::sample::Sample;
 use kernel::repository::sample::SampleRepository;
 use mockall::mock;
 use registry::{AppModule, AppState};
@@ -22,7 +23,7 @@ mock! {
     TestSampleRepository {}
     #[async_trait]
     impl SampleRepository for TestSampleRepository {
-        async fn find_all(&self) ->  AppResult<String>;
+        async fn find_all(&self) ->  AppResult<Vec<Sample>>;
     }
 }
 
