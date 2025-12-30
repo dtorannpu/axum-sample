@@ -18,6 +18,7 @@ adapter = { path = "./adapter" }
 api = { path = "./api" }
 kernel = { path = "./kernel" }
 registry = { path = "./registry" }
+shared = { path = "./shared" }
 async-trait = { version = "0.1.89" }
 anyhow = { version = "1.0.100", default-features = false }
 axum = { version = "0.8.8", features = ["http1", "tokio", "macros"], default-features = false }
@@ -37,8 +38,13 @@ garde = { version = "0.22.1", features = ["derive"] }
 axum-valid = { version = "0.24.0", default-features = false, features = ["garde", "json", "into_json"] }
 shaku = { version = "0.6.2", features = ["derive"] }
 derive-new = { version = "0.7.0", default-features = false }
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres"] }
+thiserror = { version = "2.0.17" }
+mockall = "0.14.0"
 
 [dependencies]
+adapter.workspace = true
+shared.workspace = true
 api.workspace = true
 registry.workspace = true
 anyhow.workspace = true
@@ -52,4 +58,3 @@ tracing-subscriber.workspace = true
 opentelemetry-semantic-conventions.workspace = true
 opentelemetry-otlp.workspace = true
 tower-http.workspace = true
-

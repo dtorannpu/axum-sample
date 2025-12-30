@@ -1,3 +1,4 @@
+use adapter::database::connect_database_with;
 use anyhow::{Context, Result};
 use api::route::v1;
 use axum::Router;
@@ -11,6 +12,7 @@ use opentelemetry_semantic_conventions::{
     attribute::{DEPLOYMENT_ENVIRONMENT_NAME, SERVICE_VERSION},
 };
 use registry::AppState;
+use shared::config::AppConfig;
 use std::net::{Ipv4Addr, SocketAddr};
 use tower_http::LatencyUnit;
 use tower_http::trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer};
@@ -22,7 +24,9 @@ use tracing_subscriber::util::SubscriberInitExt;
 #[tokio::main]
 async fn main() -> Result<()> {
     let tracer_provider = init_tracing_subscriber()?;
-    let app_state = AppState::default();
+    let app_config = AppConfig::new()?;
+    let pool = connect_database_with(&app_config.database);
+    let app_state = AppState::new(pool);
     let router = Router::new().merge(v1::routes());
     let app = router
         .layer(

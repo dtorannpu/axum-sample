@@ -6,8 +6,10 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
+kernel.workspace = true
 adapter.workspace = true
 registry.workspace = true
+shared.workspace = true
 axum.workspace = true
 serde.workspace = true
 garde.workspace = true
@@ -19,3 +21,5 @@ rstest.workspace = true
 tokio.workspace = true
 anyhow.workspace = true
 tower.workspace = true
+mockall.workspace = true
+async-trait.workspace = true

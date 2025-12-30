@@ -1,3 +1,4 @@
+use adapter::database::{ConnectionPool, SqlxDbPool, SqlxDbPoolParameters};
 use adapter::repository::sample::SampleRepositoryImpl;
 use axum::extract::FromRef;
 use shaku::module;
@@ -5,14 +6,20 @@ use std::sync::Arc;
 
 module! {
     pub AppModule {
-        components = [SampleRepositoryImpl],
+        components = [SqlxDbPool, SampleRepositoryImpl],
         providers = []
     }
 }
 
 impl AppModule {
-    pub fn new() -> Arc<Self> {
-        Arc::new(AppModule::builder().build())
+    pub fn new(pool: ConnectionPool) -> Arc<Self> {
+        Arc::new(
+            AppModule::builder()
+                .with_component_parameters::<SqlxDbPool>(SqlxDbPoolParameters {
+                    pool: Arc::new(pool.clone()),
+                })
+                .build(),
+        )
     }
 }
 
@@ -22,10 +29,10 @@ pub struct AppState {
     pub without_validation_arguments: (),
 }
 
-impl Default for AppState {
-    fn default() -> Self {
+impl AppState {
+    pub fn new(pool: ConnectionPool) -> Self {
         Self {
-            module: AppModule::new(),
+            module: AppModule::new(pool),
             without_validation_arguments: (),
         }
     }

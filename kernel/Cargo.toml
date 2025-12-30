@@ -6,5 +6,8 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
+shared.workspace = true
 async-trait.workspace = true
 shaku.workspace = true
+
+[dev-dependencies]

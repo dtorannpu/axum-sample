@@ -6,7 +6,11 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
+shared.workspace = true
 kernel.workspace = true
 async-trait.workspace = true
 derive-new.workspace = true
 shaku.workspace = true
+sqlx.workspace = true
+
+[dev-dependencies]

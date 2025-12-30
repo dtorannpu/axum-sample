@@ -6,3 +6,9 @@ publish.workspace = true
 license.workspace = true
 
 [dependencies]
+axum.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+sqlx.workspace = true
+garde.workspace = true
+anyhow.workspace = true

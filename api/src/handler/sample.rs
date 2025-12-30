@@ -9,7 +9,7 @@ use shaku::HasComponent;
 
 pub async fn sample(State(registry): State<AppState>) -> Json<SampleList> {
     let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
-    let _a = sample_repository.get_sample().await;
+    let _a = sample_repository.find_all().await;
     Json(SampleList {
         samples: vec![
             SampleResponse {

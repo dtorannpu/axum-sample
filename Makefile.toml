@@ -1,6 +1,27 @@
 [config]
 default_to_workspace = false
 
+[env]
+HOST = "0.0.0.0"
+PORT = 8080
+DATABASE_USERNAME = "app"
+DATABASE_PASSWORD = "passwd"
+DATABASE_NAME = "app"
+DATABASE_PORT_OUTER = 5432
+DATABASE_PORT_INNER = 5432
+
+# Docker Composeのネットワーク内でのDB等への接続情報
+[tasks.set-env-docker.env]
+DATABASE_HOST = "postgres"
+DATABASE_PORT = "${DATABASE_PORT_INNER}"
+DATABASE_URL = "postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?user=${DATABASE_USERNAME}&password=${DATABASE_PASSWORD}"
+
+# Docker Compose外からDB等にアクセスする際の接続情報
+[tasks.set-env-local.env]
+DATABASE_HOST = "localhost"
+DATABASE_PORT = "${DATABASE_PORT_OUTER}"
+DATABASE_URL = "postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?user=${DATABASE_USERNAME}&password=${DATABASE_PASSWORD}"
+
 [tasks.test]
 install_crate = { crate_name = "cargo-nextest", binary = "cargo", test_arg = [
     "nextest", "--help",
@@ -41,3 +62,43 @@ dependencies = ["fmt", "clippy"]
 [tasks.features-prune]
 command = "cargo"
 args = ["features", "prune"]
+
+
+[tasks.sqlx]
+extend = "set-env-local"
+install_crate = { crate_name = "sqlx-cli", binary = "sqlx", test_arg = "--help", version = "0.8.6" }
+command = "sqlx"
+args = ["${@}", "--source", "adapter/migrations"]
+
+[tasks.compose]
+extend = "set-env-docker"
+command = "docker"
+args = ["compose", "${@}"]
+
+
+[tasks.psql]
+extend = "set-env-local"
+command = "docker"
+args = [
+    "run", "-it", "--rm",
+    "--network", "host",
+    "-v", "${WORK_DIR}:/work",
+    "postgres:18.1", "psql", "${DATABASE_URL}", "${@}"
+]
+windows = { args = [
+    "run", "-it", "--rm",
+    "--network", "host",
+    "-v", "${$PWD}/work",
+    "postgres:18.1", "psql", "${DATABASE_URL}", "${@}"
+] }
+
+[tasks.sqlx-create]
+extend = "set-env-local"
+install_crate = { crate_name = "sqlx-cli", binary = "sqlx", test_arg = "--help", version = "0.8.6" }
+command = "sqlx"
+args = ["database", "create"]
+
+[tasks.compose-up-db]
+extend = "set-env-docker"
+command = "docker"
+args = ["compose", "up", "-d", "postgres"]
