@@ -1,4 +1,4 @@
-use adapter::database::{ConnectionPool, SqlxDbPool, SqlxDbPoolParameters};
+use adapter::database::{ConnectionPool, ConnectionPoolParameters};
 use adapter::repository::sample::SampleRepositoryImpl;
 use axum::extract::FromRef;
 use shaku::module;
@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 module! {
     pub AppModule {
-        components = [SqlxDbPool, SampleRepositoryImpl],
+        components = [ConnectionPool, SampleRepositoryImpl],
         providers = []
     }
 }
@@ -15,8 +15,8 @@ impl AppModule {
     pub fn new(pool: ConnectionPool) -> Arc<Self> {
         Arc::new(
             AppModule::builder()
-                .with_component_parameters::<SqlxDbPool>(SqlxDbPoolParameters {
-                    pool: pool.clone(),
+                .with_component_parameters::<ConnectionPool>(ConnectionPoolParameters {
+                    pool: pool.inner_ref().clone(),
                 })
                 .build(),
         )
