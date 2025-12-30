@@ -6,7 +6,6 @@ use shared::config::DatabaseConfig;
 use shared::error::{AppError, AppResult};
 use sqlx::PgPool;
 use sqlx::postgres::PgConnectOptions;
-use std::sync::Arc;
 
 fn make_pg_connect_options(cfg: &DatabaseConfig) -> PgConnectOptions {
     PgConnectOptions::new()
@@ -44,7 +43,7 @@ pub trait DbPool: Interface {
 #[derive(new, Component)]
 #[shaku(interface = DbPool)]
 pub struct SqlxDbPool {
-    pool: Arc<ConnectionPool>,
+    pool: ConnectionPool,
 }
 impl DbPool for SqlxDbPool {
     fn get(&self) -> &ConnectionPool {

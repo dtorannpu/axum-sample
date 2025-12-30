@@ -70,9 +70,8 @@ mod tests {
         .execute(&pool)
         .await?;
 
-        let repo = SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(Arc::new(
-            ConnectionPool::new(pool.clone()),
-        ))));
+        let repo =
+            SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(ConnectionPool::new(pool.clone()))));
         let mut samples = repo.find_all().await?;
         samples.sort_by(|a, b| a.name.cmp(&b.name));
 
@@ -92,9 +91,8 @@ mod tests {
 
     #[sqlx::test]
     async fn test_create_ok(pool: sqlx::PgPool) -> anyhow::Result<()> {
-        let repo = SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(Arc::new(
-            ConnectionPool::new(pool.clone()),
-        ))));
+        let repo =
+            SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(ConnectionPool::new(pool.clone()))));
 
         let res = repo
             .create(CreateSample {
@@ -113,9 +111,8 @@ mod tests {
 
     #[sqlx::test]
     async fn test_create_ng(pool: sqlx::PgPool) -> anyhow::Result<()> {
-        let repo = SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(Arc::new(
-            ConnectionPool::new(pool.clone()),
-        ))));
+        let repo =
+            SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(ConnectionPool::new(pool.clone()))));
 
         let res1 = repo
             .create(CreateSample {
