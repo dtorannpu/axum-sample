@@ -1,8 +1,9 @@
+use kernel::model::id::SampleId;
 use kernel::model::sample::Sample;
 use shared::error::AppError;
 
 pub(crate) struct SampleRow {
-    pub id: i64,
+    pub id: SampleId,
     pub name: String,
     pub age: i32,
 }

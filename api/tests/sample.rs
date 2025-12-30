@@ -46,12 +46,12 @@ async fn show_sample(
     sample_repository.expect_find_all().returning(move || {
         Ok(vec![
             Sample {
-                id: 1,
+                id: 1.into(),
                 name: "Sample".to_string(),
                 age: 20,
             },
             Sample {
-                id: 2,
+                id: 2.into(),
                 name: "Sample2".to_string(),
                 age: 30,
             },
