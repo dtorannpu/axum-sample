@@ -22,6 +22,9 @@ DATABASE_HOST = "localhost"
 DATABASE_PORT = "${DATABASE_PORT_OUTER}"
 DATABASE_URL = "postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?user=${DATABASE_USERNAME}&password=${DATABASE_PASSWORD}"
 
+[tasks.before-build]
+run_task = { name = ["compose-up-db", "migrate"] }
+
 [tasks.test]
 install_crate = { crate_name = "cargo-nextest", binary = "cargo", test_arg = [
     "nextest", "--help",
@@ -102,3 +105,13 @@ args = ["database", "create"]
 extend = "set-env-docker"
 command = "docker"
 args = ["compose", "up", "-d", "postgres"]
+
+[tasks.migrate]
+extend = "set-env-local"
+install_crate = { crate_name = "sqlx-cli", binary = "sqlx", test_arg = "--help", version = "0.8.6" }
+script = '''
+#!/bin/bash
+until sqlx migrate run --source adapter/migrations; do
+    sleep 1
+done
+'''
