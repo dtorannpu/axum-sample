@@ -1,9 +1,9 @@
 use crate::model::sample::{SampleList, SampleRequest, SampleResponse};
-use adapter::repository::sample::SampleRepository;
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
 use axum_valid::Garde;
+use kernel::repository::sample::SampleRepository;
 use registry::AppState;
 use shaku::HasComponent;
 

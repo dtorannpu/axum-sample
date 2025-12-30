@@ -1,9 +1,13 @@
+pub(crate) mod model;
+
+use derive_new::new;
 use shaku::{Component, Interface};
 use shared::config::DatabaseConfig;
 use shared::error::{AppError, AppResult};
 use sqlx::PgPool;
 use sqlx::postgres::PgConnectOptions;
 use std::sync::Arc;
+
 fn make_pg_connect_options(cfg: &DatabaseConfig) -> PgConnectOptions {
     PgConnectOptions::new()
         .host(&cfg.host)
@@ -37,7 +41,7 @@ pub trait DbPool: Interface {
     fn get(&self) -> &ConnectionPool;
 }
 
-#[derive(Component)]
+#[derive(new, Component)]
 #[shaku(interface = DbPool)]
 pub struct SqlxDbPool {
     pool: Arc<ConnectionPool>,

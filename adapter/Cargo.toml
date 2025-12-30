@@ -14,3 +14,4 @@ shaku.workspace = true
 sqlx.workspace = true
 
 [dev-dependencies]
+anyhow.workspace = true
