@@ -16,7 +16,7 @@ impl AppModule {
         Arc::new(
             AppModule::builder()
                 .with_component_parameters::<SqlxDbPool>(SqlxDbPoolParameters {
-                    pool: Arc::new(pool.clone()),
+                    pool: pool.clone(),
                 })
                 .build(),
         )
