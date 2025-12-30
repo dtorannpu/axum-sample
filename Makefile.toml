@@ -36,6 +36,7 @@ args = [
 ]
 
 [tasks.test-ci]
+dependencies = ["before-build"]
 run_task = "test"
 
 [tasks.clippy]
