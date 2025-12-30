@@ -1,5 +1,5 @@
 pub struct CreateSample {
     pub name: String,
     pub email: String,
-    pub age: i32,
+    pub age: i16,
 }

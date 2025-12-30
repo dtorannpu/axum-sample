@@ -62,9 +62,9 @@ mod tests {
             r#"
                 INSERT INTO sample(name, email, age)
                 VALUES
-                    ('test1', 'test1@example.com', 10),
+                    ('test1', 'test1@example.com', 0),
                     ('test2', 'test2@example.com', 20),
-                    ('test3', 'test3@example.com', 30);
+                    ('test3', 'test3@example.com', 100);
             "#
         )
         .execute(&pool)
@@ -79,13 +79,13 @@ mod tests {
         assert_eq!(samples.len(), 3);
         assert_eq!(samples[0].name, "test1");
         assert_eq!(samples[0].email, "test1@example.com");
-        assert_eq!(samples[0].age, 10);
+        assert_eq!(samples[0].age, 0);
         assert_eq!(samples[1].name, "test2");
         assert_eq!(samples[1].email, "test2@example.com");
         assert_eq!(samples[1].age, 20);
         assert_eq!(samples[2].name, "test3");
         assert_eq!(samples[2].email, "test3@example.com");
-        assert_eq!(samples[2].age, 30);
+        assert_eq!(samples[2].age, 100);
 
         Ok(())
     }

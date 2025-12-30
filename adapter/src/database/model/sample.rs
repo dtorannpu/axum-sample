@@ -6,7 +6,7 @@ pub(crate) struct SampleRow {
     pub id: SampleId,
     pub name: String,
     pub email: String,
-    pub age: i32,
+    pub age: i16,
 }
 
 impl TryFrom<SampleRow> for Sample {

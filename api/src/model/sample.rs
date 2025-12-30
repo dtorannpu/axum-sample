@@ -9,7 +9,7 @@ pub struct SampleResponse {
     pub id: SampleId,
     pub name: String,
     pub email: String,
-    pub age: i32,
+    pub age: i16,
 }
 
 impl From<Sample> for SampleResponse {
@@ -51,7 +51,7 @@ pub struct CreateSampleRequest {
     #[garde(email)]
     pub email: String,
     #[garde(range(min = 0, max = 100))]
-    pub age: i32,
+    pub age: i16,
 }
 
 impl From<CreateSampleRequest> for CreateSample {
