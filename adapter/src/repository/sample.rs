@@ -17,7 +17,7 @@ pub struct SampleRepositoryImpl {
 #[async_trait]
 impl SampleRepository for SampleRepositoryImpl {
     async fn find_all(&self) -> AppResult<Vec<Sample>> {
-        let result = sqlx::query_as!(Sample, "SELECT * FROM sample")
+        let result = sqlx::query_as!(Sample, "SELECT id, name, age FROM sample")
             .fetch_all(self.pool.get().inner_ref())
             .await
             .map_err(AppError::SpecificOperationError)?;
