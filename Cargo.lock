@@ -951,6 +951,7 @@ name = "kernel"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "serde",
  "shaku",
  "shared",
 ]

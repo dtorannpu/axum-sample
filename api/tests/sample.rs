@@ -4,6 +4,7 @@ use async_trait::async_trait;
 use axum::body::Body;
 use axum::http::{Request, StatusCode};
 use kernel::model::sample::Sample;
+use kernel::model::sample::event::CreateSample;
 use kernel::repository::sample::SampleRepository;
 use mockall::mock;
 use registry::{AppModule, AppState};
@@ -23,7 +24,8 @@ mock! {
     TestSampleRepository {}
     #[async_trait]
     impl SampleRepository for TestSampleRepository {
-        async fn find_all(&self) ->  AppResult<Vec<Sample>>;
+        async fn find_all(&self) -> AppResult<Vec<Sample>>;
+        async fn create(&self, event: CreateSample) -> AppResult<Sample>;
     }
 }
 
@@ -48,11 +50,13 @@ async fn show_sample(
             Sample {
                 id: 1.into(),
                 name: "Sample".to_string(),
+                email: "sample@example.com".to_string(),
                 age: 20,
             },
             Sample {
                 id: 2.into(),
                 name: "Sample2".to_string(),
+                email: "sample2@example.com".to_string(),
                 age: 30,
             },
         ])
@@ -76,7 +80,7 @@ async fn show_sample(
     let body = axum::body::to_bytes(resp.into_body(), usize::MAX).await?;
     assert_eq!(
         String::from_utf8(body.to_vec())?,
-        r#"{"samples":[{"name":"Sample","age":20},{"name":"Sample2","age":30}]}"#
+        r#"{"samples":[{"id":1,"name":"Sample","email":"sample@example.com","age":20},{"id":2,"name":"Sample2","email":"sample2@example.com","age":30}]}"#
     );
 
     Ok(())

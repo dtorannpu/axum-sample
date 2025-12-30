@@ -1,4 +1,4 @@
-use crate::model::sample::{SampleList, SampleRequest, SampleResponse};
+use crate::model::sample::{SampleList, SampleRequest};
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -6,22 +6,15 @@ use axum_valid::Garde;
 use kernel::repository::sample::SampleRepository;
 use registry::AppState;
 use shaku::HasComponent;
+use shared::error::AppResult;
 
-pub async fn sample(State(registry): State<AppState>) -> Json<SampleList> {
+pub async fn sample(State(registry): State<AppState>) -> AppResult<Json<SampleList>> {
     let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
-    let _a = sample_repository.find_all().await;
-    Json(SampleList {
-        samples: vec![
-            SampleResponse {
-                name: "Sample".to_string(),
-                age: 20,
-            },
-            SampleResponse {
-                name: "Sample2".to_string(),
-                age: 30,
-            },
-        ],
-    })
+    sample_repository
+        .find_all()
+        .await
+        .map(SampleList::from)
+        .map(Json)
 }
 
 pub async fn register(

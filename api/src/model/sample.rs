@@ -1,4 +1,6 @@
 use garde::Validate;
+use kernel::model::id::SampleId;
+use kernel::model::sample::Sample;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Validate)]
@@ -12,11 +14,39 @@ pub struct SampleRequest {
 
 #[derive(Debug, Serialize)]
 pub struct SampleResponse {
+    pub id: SampleId,
     pub name: String,
-    pub age: u8,
+    pub email: String,
+    pub age: i32,
+}
+
+impl From<Sample> for SampleResponse {
+    fn from(value: Sample) -> Self {
+        let Sample {
+            id,
+            name,
+            email,
+            age,
+        } = value;
+
+        Self {
+            id,
+            name,
+            email,
+            age,
+        }
+    }
 }
 
 #[derive(Debug, Serialize)]
 pub struct SampleList {
     pub samples: Vec<SampleResponse>,
+}
+
+impl From<Vec<Sample>> for SampleList {
+    fn from(value: Vec<Sample>) -> Self {
+        Self {
+            samples: value.into_iter().map(SampleResponse::from).collect(),
+        }
+    }
 }
