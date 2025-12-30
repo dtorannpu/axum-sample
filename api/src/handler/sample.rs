@@ -1,4 +1,4 @@
-use crate::model::sample::{SampleList, SampleRequest};
+use crate::model::sample::{CreateSampleRequest, SampleList};
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -18,8 +18,12 @@ pub async fn sample(State(registry): State<AppState>) -> AppResult<Json<SampleLi
 }
 
 pub async fn register(
-    State(_registry): State<AppState>,
-    Garde(Json(_)): Garde<Json<SampleRequest>>,
-) -> StatusCode {
-    StatusCode::CREATED
+    State(registry): State<AppState>,
+    Garde(Json(req)): Garde<Json<CreateSampleRequest>>,
+) -> AppResult<StatusCode> {
+    let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
+    sample_repository
+        .create(req.into())
+        .await
+        .map(|_| StatusCode::CREATED)
 }

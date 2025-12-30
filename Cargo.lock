@@ -569,6 +569,8 @@ checksum = "3a74b56a4039a46e8c91cc9d84e8a7df4e1f8b24239ca57d1304b3263cb599b9"
 dependencies = [
  "compact_str",
  "garde_derive",
+ "once_cell",
+ "regex",
  "serde",
  "smallvec",
 ]
@@ -581,6 +583,7 @@ checksum = "7224c08ec489e2840af29ed882b47f7f6ac8f4ce15c275d9fc0d6d1b94578ae6"
 dependencies = [
  "proc-macro2",
  "quote",
+ "regex",
  "syn 2.0.111",
 ]
 

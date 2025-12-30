@@ -90,13 +90,21 @@ async fn show_sample(
 #[tokio::test]
 async fn register_sample_ok(
     db_pool: Box<dyn DbPool>,
-    sample_repository: Box<dyn SampleRepository>,
+    mut sample_repository: Box<MockTestSampleRepository>,
 ) -> anyhow::Result<()> {
+    sample_repository.expect_create().returning(move |request| {
+        Ok(Sample {
+            id: 1.into(),
+            name: request.name,
+            email: request.email,
+            age: request.age,
+        })
+    });
     let state = AppState {
         module: Arc::new(
             AppModule::builder()
                 .with_component_override(db_pool)
-                .with_component_override(sample_repository)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
                 .build(),
         ),
         without_validation_arguments: (),
@@ -107,7 +115,9 @@ async fn register_sample_ok(
         .method("POST")
         .uri("/v1/sample")
         .header("content-type", "application/json")
-        .body(Body::from(r#"{"name": "test", "age": 10}"#))?;
+        .body(Body::from(
+            r#"{"name": "test", "email": "test@example.com", "age": 10}"#,
+        ))?;
     let resp = app.oneshot(req).await?;
 
     assert_eq!(resp.status(), StatusCode::CREATED);
@@ -119,13 +129,13 @@ async fn register_sample_ok(
 #[tokio::test]
 async fn register_sample_ng(
     db_pool: Box<dyn DbPool>,
-    sample_repository: Box<dyn SampleRepository>,
+    sample_repository: Box<MockTestSampleRepository>,
 ) -> anyhow::Result<()> {
     let state = AppState {
         module: Arc::new(
             AppModule::builder()
                 .with_component_override(db_pool)
-                .with_component_override(sample_repository)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
                 .build(),
         ),
         without_validation_arguments: (),
@@ -136,7 +146,7 @@ async fn register_sample_ng(
         .method("POST")
         .uri("/v1/sample")
         .header("content-type", "application/json")
-        .body(Body::from(r#"{"name": "", "age": 10}"#))?;
+        .body(Body::from(r#"{"name": "", "email": "", "age": 10}"#))?;
     let resp = app.oneshot(req).await?;
 
     assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
