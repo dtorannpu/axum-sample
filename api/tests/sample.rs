@@ -45,53 +45,6 @@ fn sample_repository() -> Box<MockTestSampleRepository> {
 
 #[rstest]
 #[tokio::test]
-async fn show_sample(
-    db_pool: Box<dyn DbPool>,
-    mut sample_repository: Box<MockTestSampleRepository>,
-) -> anyhow::Result<()> {
-    sample_repository.expect_find_all().returning(move || {
-        Ok(vec![
-            Sample {
-                id: 1.into(),
-                name: "Sample".to_string(),
-                email: "sample@example.com".to_string(),
-                age: 20,
-            },
-            Sample {
-                id: 2.into(),
-                name: "Sample2".to_string(),
-                email: "sample2@example.com".to_string(),
-                age: 30,
-            },
-        ])
-    });
-    let state = AppState {
-        module: Arc::new(
-            AppModule::builder()
-                .with_component_override(db_pool)
-                .with_component_override::<dyn SampleRepository>(sample_repository)
-                .build(),
-        ),
-        without_validation_arguments: (),
-    };
-    let app = v1::routes().with_state(state);
-
-    let req = Request::builder().uri("/v1/sample").body(Body::empty())?;
-    let resp = app.oneshot(req).await?;
-
-    assert_eq!(resp.status(), StatusCode::OK);
-
-    let body = axum::body::to_bytes(resp.into_body(), usize::MAX).await?;
-    assert_eq!(
-        String::from_utf8(body.to_vec())?,
-        r#"{"samples":[{"id":1,"name":"Sample","email":"sample@example.com","age":20},{"id":2,"name":"Sample2","email":"sample2@example.com","age":30}]}"#
-    );
-
-    Ok(())
-}
-
-#[rstest]
-#[tokio::test]
 async fn register_sample_ok(
     db_pool: Box<dyn DbPool>,
     mut sample_repository: Box<MockTestSampleRepository>,
@@ -154,6 +107,120 @@ async fn register_sample_ng(
     let resp = app.oneshot(req).await?;
 
     assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
+
+    Ok(())
+}
+
+#[rstest]
+#[tokio::test]
+async fn show_sample_list(
+    db_pool: Box<dyn DbPool>,
+    mut sample_repository: Box<MockTestSampleRepository>,
+) -> anyhow::Result<()> {
+    sample_repository.expect_find_all().returning(move || {
+        Ok(vec![
+            Sample {
+                id: 1.into(),
+                name: "Sample".to_string(),
+                email: "sample@example.com".to_string(),
+                age: 20,
+            },
+            Sample {
+                id: 2.into(),
+                name: "Sample2".to_string(),
+                email: "sample2@example.com".to_string(),
+                age: 30,
+            },
+        ])
+    });
+    let state = AppState {
+        module: Arc::new(
+            AppModule::builder()
+                .with_component_override(db_pool)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
+                .build(),
+        ),
+        without_validation_arguments: (),
+    };
+    let app = v1::routes().with_state(state);
+
+    let req = Request::builder().uri("/v1/sample").body(Body::empty())?;
+    let resp = app.oneshot(req).await?;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let body = axum::body::to_bytes(resp.into_body(), usize::MAX).await?;
+    assert_eq!(
+        String::from_utf8(body.to_vec())?,
+        r#"{"samples":[{"id":1,"name":"Sample","email":"sample@example.com","age":20},{"id":2,"name":"Sample2","email":"sample2@example.com","age":30}]}"#
+    );
+
+    Ok(())
+}
+
+#[rstest]
+#[tokio::test]
+async fn show_sample_ok(
+    db_pool: Box<dyn DbPool>,
+    mut sample_repository: Box<MockTestSampleRepository>,
+) -> anyhow::Result<()> {
+    sample_repository.expect_find_by_id().returning(move |_id| {
+        Ok(Some(Sample {
+            id: 1.into(),
+            name: "Sample".to_string(),
+            email: "sample@example.com".to_string(),
+            age: 20,
+        }))
+    });
+    let state = AppState {
+        module: Arc::new(
+            AppModule::builder()
+                .with_component_override(db_pool)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
+                .build(),
+        ),
+        without_validation_arguments: (),
+    };
+    let app = v1::routes().with_state(state);
+
+    let req = Request::builder().uri("/v1/sample/1").body(Body::empty())?;
+    let resp = app.oneshot(req).await?;
+
+    assert_eq!(resp.status(), StatusCode::OK);
+
+    let body = axum::body::to_bytes(resp.into_body(), usize::MAX).await?;
+    assert_eq!(
+        String::from_utf8(body.to_vec())?,
+        r#"{"id":1,"name":"Sample","email":"sample@example.com","age":20}"#
+    );
+
+    Ok(())
+}
+
+#[rstest]
+#[tokio::test]
+async fn show_sample_ng(
+    db_pool: Box<dyn DbPool>,
+    mut sample_repository: Box<MockTestSampleRepository>,
+) -> anyhow::Result<()> {
+    sample_repository
+        .expect_find_by_id()
+        .returning(move |_id| Ok(None));
+    let state = AppState {
+        module: Arc::new(
+            AppModule::builder()
+                .with_component_override(db_pool)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
+                .build(),
+        ),
+        without_validation_arguments: (),
+    };
+    let app = v1::routes().with_state(state);
+
+    let req = Request::builder().uri("/v1/sample/1").body(Body::empty())?;
+    let resp = app.oneshot(req).await?;
+
+    assert_eq!(resp.status(), StatusCode::NOT_FOUND);
 
     Ok(())
 }

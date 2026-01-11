@@ -1,21 +1,13 @@
-use crate::model::sample::{CreateSampleRequest, SampleList};
+use crate::model::sample::{CreateSampleRequest, SampleList, SampleResponse};
 use axum::Json;
-use axum::extract::State;
+use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum_valid::Garde;
+use kernel::model::id::SampleId;
 use kernel::repository::sample::SampleRepository;
 use registry::AppState;
 use shaku::HasComponent;
-use shared::error::AppResult;
-
-pub async fn sample(State(registry): State<AppState>) -> AppResult<Json<SampleList>> {
-    let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
-    sample_repository
-        .find_all()
-        .await
-        .map(SampleList::from)
-        .map(Json)
-}
+use shared::error::{AppError, AppResult};
 
 pub async fn register(
     State(registry): State<AppState>,
@@ -26,4 +18,25 @@ pub async fn register(
         .create(req.into())
         .await
         .map(|_| StatusCode::CREATED)
+}
+
+pub async fn show_sample_list(State(registry): State<AppState>) -> AppResult<Json<SampleList>> {
+    let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
+    sample_repository
+        .find_all()
+        .await
+        .map(SampleList::from)
+        .map(Json)
+}
+pub async fn show_sample(
+    State(registry): State<AppState>,
+    Path(id): Path<SampleId>,
+) -> AppResult<Json<SampleResponse>> {
+    let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
+    sample_repository
+        .find_by_id(id)
+        .await?
+        .ok_or_else(|| AppError::EntityNotFound(format!("SampleId: {} is not found", id.get())))
+        .map(SampleResponse::from)
+        .map(Json)
 }
