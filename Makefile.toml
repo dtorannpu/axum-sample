@@ -115,6 +115,16 @@ extend = "set-env-docker"
 command = "docker"
 args = ["compose", "up", "-d", "postgres"]
 
+[tasks.compose-up-jaeger]
+extend = "set-env-docker"
+command = "docker"
+args = ["compose", "up", "-d", "jaeger"]
+
+[tasks.compose-down]
+extend = "set-env-docker"
+command = "docker"
+args = ["compose", "down"]
+
 [tasks.migrate]
 extend = "set-env-local"
 install_crate = { crate_name = "sqlx-cli", binary = "sqlx", test_arg = "--help", version = "0.8.6" }
