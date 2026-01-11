@@ -49,7 +49,7 @@ impl SampleRepository for SampleRepositoryImpl {
 
 #[cfg(test)]
 mod tests {
-    use crate::database::{ConnectionPool, SqlxDbPool};
+    use crate::database::ConnectionPool;
     use crate::repository::sample::SampleRepositoryImpl;
     use kernel::model::sample::event::CreateSample;
     use kernel::repository::sample::SampleRepository;
@@ -108,7 +108,7 @@ mod tests {
     }
 
     #[sqlx::test]
-    async fn test_create_ng(pool: sqlx::PgPool) -> anyhow::Result<()> {
+    async fn test_create_ng_not_email_unique(pool: sqlx::PgPool) -> anyhow::Result<()> {
         let repo = SampleRepositoryImpl::new(Arc::new(ConnectionPool::new(pool.clone())));
 
         let res1 = repo
@@ -144,9 +144,7 @@ mod tests {
 
     #[sqlx::test]
     async fn test_create_ng_age_minus(pool: sqlx::PgPool) -> anyhow::Result<()> {
-        let repo = SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(Arc::new(
-            ConnectionPool::new(pool.clone()),
-        ))));
+        let repo = SampleRepositoryImpl::new(Arc::new(ConnectionPool::new(pool.clone())));
 
         let res = repo
             .create(CreateSample {
@@ -169,9 +167,7 @@ mod tests {
 
     #[sqlx::test]
     async fn test_create_ng_age_over(pool: sqlx::PgPool) -> anyhow::Result<()> {
-        let repo = SampleRepositoryImpl::new(Arc::new(SqlxDbPool::new(Arc::new(
-            ConnectionPool::new(pool.clone()),
-        ))));
+        let repo = SampleRepositoryImpl::new(Arc::new(ConnectionPool::new(pool.clone())));
 
         let res = repo
             .create(CreateSample {
