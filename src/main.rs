@@ -13,11 +13,13 @@ use opentelemetry_semantic_conventions::{
 };
 use registry::AppState;
 use shared::config::AppConfig;
+use shared::env::{Environment, which};
 use std::net::{Ipv4Addr, SocketAddr};
 use tower_http::LatencyUnit;
 use tower_http::trace::{DefaultOnRequest, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetryLayer;
+use tracing_subscriber::EnvFilter;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
@@ -95,15 +97,23 @@ fn init_tracer_provider() -> Result<SdkTracerProvider> {
 }
 
 fn init_tracing_subscriber() -> Result<SdkTracerProvider> {
+    let log_level = match which() {
+        Environment::Development => "debug",
+        Environment::Production => "info",
+    };
     let tracer_provider = init_tracer_provider()?;
 
     let tracer = tracer_provider.tracer("axum-sample-tracer");
 
     tracing_subscriber::registry()
-        .with(tracing_subscriber::filter::LevelFilter::from_level(
-            Level::INFO,
-        ))
-        .with(tracing_subscriber::fmt::layer())
+        .with(EnvFilter::try_from_default_env().unwrap_or_else(|_| log_level.into()))
+        .with(
+            tracing_subscriber::fmt::layer()
+                .with_file(true)
+                .with_line_number(true)
+                .with_target(false)
+                .json(),
+        )
         .with(OpenTelemetryLayer::new(tracer))
         .init();
 

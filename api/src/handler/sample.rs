@@ -13,6 +13,7 @@ use registry::AppState;
 use shaku::HasComponent;
 use shared::error::{AppError, AppResult};
 
+#[tracing::instrument(skip(registry))]
 pub async fn register(
     State(registry): State<AppState>,
     Garde(Json(req)): Garde<Json<CreateSampleRequest>>,
@@ -23,7 +24,7 @@ pub async fn register(
         .await
         .map(|_| StatusCode::CREATED)
 }
-
+#[tracing::instrument(skip(registry))]
 pub async fn show_sample_list(State(registry): State<AppState>) -> AppResult<Json<SampleList>> {
     let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
     sample_repository
@@ -32,6 +33,8 @@ pub async fn show_sample_list(State(registry): State<AppState>) -> AppResult<Jso
         .map(SampleList::from)
         .map(Json)
 }
+
+#[tracing::instrument(skip(registry))]
 pub async fn show_sample(
     State(registry): State<AppState>,
     Path(id): Path<SampleId>,
@@ -45,6 +48,7 @@ pub async fn show_sample(
         .map(Json)
 }
 
+#[tracing::instrument(skip(registry))]
 pub async fn update_sample(
     State(registry): State<AppState>,
     Path(id): Path<SampleId>,
@@ -56,6 +60,7 @@ pub async fn update_sample(
     Ok(StatusCode::NO_CONTENT)
 }
 
+#[tracing::instrument(skip(registry))]
 pub async fn delete_sample(
     State(registry): State<AppState>,
     Path(id): Path<SampleId>,
