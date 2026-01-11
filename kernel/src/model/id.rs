@@ -18,3 +18,9 @@ impl From<i64> for SampleId {
         Self(value)
     }
 }
+
+impl From<SampleId> for i64 {
+    fn from(value: SampleId) -> Self {
+        value.0
+    }
+}

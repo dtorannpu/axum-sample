@@ -3,8 +3,9 @@ use api::route::v1;
 use async_trait::async_trait;
 use axum::body::Body;
 use axum::http::Request;
+use kernel::model::id::SampleId;
 use kernel::model::sample::Sample;
-use kernel::model::sample::event::CreateSample;
+use kernel::model::sample::event::{CreateSample, DeleteSample, UpdateSample};
 use kernel::repository::sample::SampleRepository;
 use mockall::mock;
 use registry::{AppModule, AppState};
@@ -24,8 +25,11 @@ mock! {
     TestSampleRepository {}
     #[async_trait]
     impl SampleRepository for TestSampleRepository {
-        async fn find_all(&self) -> AppResult<Vec<Sample>>;
         async fn create(&self, event: CreateSample) -> AppResult<Sample>;
+        async fn find_all(&self) -> AppResult<Vec<Sample>>;
+        async fn find_by_id(&self, id: SampleId) -> AppResult<Option<Sample>>;
+        async fn update(&self, event: UpdateSample) -> AppResult<()>;
+        async fn delete(&self, event: DeleteSample) -> AppResult<()>;
     }
 }
 
