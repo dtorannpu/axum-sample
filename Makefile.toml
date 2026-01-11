@@ -25,7 +25,15 @@ DATABASE_URL = "postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?
 [tasks.before-build]
 run_task = { name = ["compose-up-db", "migrate"] }
 
+[tasks.build]
+extend = "set-env-local"
+dependencies = ["before-build"]
+command = "cargo"
+args = ["build", "${@}"]
+
 [tasks.test]
+extend = "set-env-local"
+dependencies = ["before-build"]
 install_crate = { crate_name = "cargo-nextest", binary = "cargo", test_arg = [
     "nextest", "--help",
 ] }
