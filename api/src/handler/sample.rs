@@ -7,6 +7,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum_valid::Garde;
 use kernel::model::id::SampleId;
+use kernel::model::sample::event::DeleteSample;
 use kernel::repository::sample::SampleRepository;
 use registry::AppState;
 use shaku::HasComponent;
@@ -52,5 +53,14 @@ pub async fn update_sample(
     let update_sample = UpdateSampleRequestWithIds::new(id, req);
     let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
     sample_repository.update(update_sample.into()).await?;
+    Ok(StatusCode::NO_CONTENT)
+}
+
+pub async fn delete_sample(
+    State(registry): State<AppState>,
+    Path(id): Path<SampleId>,
+) -> AppResult<StatusCode> {
+    let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
+    sample_repository.delete(DeleteSample { id }).await?;
     Ok(StatusCode::NO_CONTENT)
 }

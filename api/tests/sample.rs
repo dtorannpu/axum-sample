@@ -289,3 +289,67 @@ async fn show_sample_ng(
 
     Ok(())
 }
+
+#[rstest]
+#[tokio::test]
+async fn delete_sample_ok(
+    db_pool: Box<dyn DbPool>,
+    mut sample_repository: Box<MockTestSampleRepository>,
+) -> anyhow::Result<()> {
+    sample_repository
+        .expect_delete()
+        .returning(move |_event| Ok(()));
+    let state = AppState {
+        module: Arc::new(
+            AppModule::builder()
+                .with_component_override(db_pool)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
+                .build(),
+        ),
+        without_validation_arguments: (),
+    };
+    let app = v1::routes().with_state(state);
+
+    let req = Request::builder()
+        .method("DELETE")
+        .uri("/v1/sample/1")
+        .body(Body::empty())?;
+    let resp = app.oneshot(req).await?;
+
+    assert_eq!(resp.status(), StatusCode::NO_CONTENT);
+
+    Ok(())
+}
+
+#[rstest]
+#[tokio::test]
+async fn delete_sample_ng(
+    db_pool: Box<dyn DbPool>,
+    mut sample_repository: Box<MockTestSampleRepository>,
+) -> anyhow::Result<()> {
+    sample_repository.expect_delete().returning(move |_event| {
+        Err(shared::error::AppError::EntityNotFound(
+            "specified book not found".into(),
+        ))
+    });
+    let state = AppState {
+        module: Arc::new(
+            AppModule::builder()
+                .with_component_override(db_pool)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
+                .build(),
+        ),
+        without_validation_arguments: (),
+    };
+    let app = v1::routes().with_state(state);
+
+    let req = Request::builder()
+        .method("DELETE")
+        .uri("/v1/sample/1")
+        .body(Body::empty())?;
+    let resp = app.oneshot(req).await?;
+
+    assert_eq!(resp.status(), StatusCode::NOT_FOUND);
+
+    Ok(())
+}
