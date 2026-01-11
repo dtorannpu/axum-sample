@@ -1,6 +1,5 @@
 use kernel::model::id::SampleId;
 use kernel::model::sample::Sample;
-use shared::error::AppError;
 
 pub(crate) struct SampleRow {
     pub id: SampleId,
@@ -9,21 +8,19 @@ pub(crate) struct SampleRow {
     pub age: i16,
 }
 
-impl TryFrom<SampleRow> for Sample {
-    type Error = AppError;
-
-    fn try_from(value: SampleRow) -> Result<Self, Self::Error> {
+impl From<SampleRow> for Sample {
+    fn from(value: SampleRow) -> Self {
         let SampleRow {
             id,
             name,
             email,
             age,
         } = value;
-        Ok(Sample {
+        Sample {
             id,
             name,
             email,
             age,
-        })
+        }
     }
 }
