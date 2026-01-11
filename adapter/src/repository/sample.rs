@@ -108,7 +108,7 @@ mod tests {
     }
 
     #[sqlx::test]
-    async fn test_create_ng(pool: sqlx::PgPool) -> anyhow::Result<()> {
+    async fn test_create_ng_not_email_unique(pool: sqlx::PgPool) -> anyhow::Result<()> {
         let repo = SampleRepositoryImpl::new(Arc::new(ConnectionPool::new(pool.clone())));
 
         let res1 = repo
@@ -136,6 +136,52 @@ mod tests {
             Err(AppError::SpecificOperationError(e)) => assert_eq!(
                 e.to_string(),
                 "error returned from database: duplicate key value violates unique constraint \"sample_email_key\""
+            ),
+            _ => panic!("Unexpected error"),
+        }
+        Ok(())
+    }
+
+    #[sqlx::test]
+    async fn test_create_ng_age_minus(pool: sqlx::PgPool) -> anyhow::Result<()> {
+        let repo = SampleRepositoryImpl::new(Arc::new(ConnectionPool::new(pool.clone())));
+
+        let res = repo
+            .create(CreateSample {
+                name: "test".into(),
+                email: "test@example.com".into(),
+                age: -1,
+            })
+            .await;
+
+        assert!(res.is_err());
+        match res {
+            Err(AppError::SpecificOperationError(e)) => assert_eq!(
+                e.to_string(),
+                "error returned from database: new row for relation \"sample\" violates check constraint \"sample_age_check\""
+            ),
+            _ => panic!("Unexpected error"),
+        }
+        Ok(())
+    }
+
+    #[sqlx::test]
+    async fn test_create_ng_age_over(pool: sqlx::PgPool) -> anyhow::Result<()> {
+        let repo = SampleRepositoryImpl::new(Arc::new(ConnectionPool::new(pool.clone())));
+
+        let res = repo
+            .create(CreateSample {
+                name: "test".into(),
+                email: "test@example.com".into(),
+                age: 101,
+            })
+            .await;
+
+        assert!(res.is_err());
+        match res {
+            Err(AppError::SpecificOperationError(e)) => assert_eq!(
+                e.to_string(),
+                "error returned from database: new row for relation \"sample\" violates check constraint \"sample_age_check\""
             ),
             _ => panic!("Unexpected error"),
         }
