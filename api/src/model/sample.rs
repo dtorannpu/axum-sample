@@ -1,7 +1,8 @@
+use derive_new::new;
 use garde::Validate;
 use kernel::model::id::SampleId;
 use kernel::model::sample::Sample;
-use kernel::model::sample::event::CreateSample;
+use kernel::model::sample::event::{CreateSample, UpdateSample};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Validate)]
@@ -20,6 +21,32 @@ impl From<CreateSampleRequest> for CreateSample {
         let CreateSampleRequest { name, email, age } = value;
 
         Self { name, email, age }
+    }
+}
+
+#[derive(Debug, Deserialize, Validate)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateSampleRequest {
+    #[garde(length(utf16, max = 100))]
+    pub name: String,
+    #[garde(email)]
+    pub email: String,
+    #[garde(range(min = 0, max = 100))]
+    pub age: i16,
+}
+
+#[derive(new)]
+pub struct UpdateSampleRequestWithIds(SampleId, UpdateSampleRequest);
+
+impl From<UpdateSampleRequestWithIds> for UpdateSample {
+    fn from(value: UpdateSampleRequestWithIds) -> Self {
+        let UpdateSampleRequestWithIds(id, UpdateSampleRequest { name, email, age }) = value;
+        Self {
+            id,
+            name,
+            email,
+            age,
+        }
     }
 }
 

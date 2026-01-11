@@ -57,6 +57,7 @@ dependencies = [
  "async-trait",
  "axum",
  "axum-valid",
+ "derive-new",
  "garde",
  "kernel",
  "mockall",

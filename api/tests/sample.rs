@@ -199,6 +199,71 @@ async fn show_sample_ok(
 
 #[rstest]
 #[tokio::test]
+async fn update_sample_ok(
+    db_pool: Box<dyn DbPool>,
+    mut sample_repository: Box<MockTestSampleRepository>,
+) -> anyhow::Result<()> {
+    sample_repository
+        .expect_update()
+        .returning(move |_event| Ok(()));
+    let state = AppState {
+        module: Arc::new(
+            AppModule::builder()
+                .with_component_override(db_pool)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
+                .build(),
+        ),
+        without_validation_arguments: (),
+    };
+    let app = v1::routes().with_state(state);
+
+    let req = Request::builder()
+        .method("PUT")
+        .uri("/v1/sample/1")
+        .header("content-type", "application/json")
+        .body(Body::from(
+            r#"{"name": "updated", "email": "updated@example.com", "age": 25}"#,
+        ))?;
+    let resp = app.oneshot(req).await?;
+
+    assert_eq!(resp.status(), StatusCode::NO_CONTENT);
+
+    Ok(())
+}
+
+#[rstest]
+#[tokio::test]
+async fn update_sample_ng(
+    db_pool: Box<dyn DbPool>,
+    sample_repository: Box<MockTestSampleRepository>,
+) -> anyhow::Result<()> {
+    let state = AppState {
+        module: Arc::new(
+            AppModule::builder()
+                .with_component_override(db_pool)
+                .with_component_override::<dyn SampleRepository>(sample_repository)
+                .build(),
+        ),
+        without_validation_arguments: (),
+    };
+    let app = v1::routes().with_state(state);
+
+    let req = Request::builder()
+        .method("PUT")
+        .uri("/v1/sample/1")
+        .header("content-type", "application/json")
+        .body(Body::from(
+            r#"{"name": "", "email": "invalid", "age": 101}"#,
+        ))?;
+    let resp = app.oneshot(req).await?;
+
+    assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
+
+    Ok(())
+}
+
+#[rstest]
+#[tokio::test]
 async fn show_sample_ng(
     db_pool: Box<dyn DbPool>,
     mut sample_repository: Box<MockTestSampleRepository>,

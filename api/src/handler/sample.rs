@@ -1,4 +1,7 @@
-use crate::model::sample::{CreateSampleRequest, SampleList, SampleResponse};
+use crate::model::sample::{
+    CreateSampleRequest, SampleList, SampleResponse, UpdateSampleRequest,
+    UpdateSampleRequestWithIds,
+};
 use axum::Json;
 use axum::extract::{Path, State};
 use axum::http::StatusCode;
@@ -39,4 +42,15 @@ pub async fn show_sample(
         .ok_or_else(|| AppError::EntityNotFound(format!("SampleId: {} is not found", id.get())))
         .map(SampleResponse::from)
         .map(Json)
+}
+
+pub async fn update_sample(
+    State(registry): State<AppState>,
+    Path(id): Path<SampleId>,
+    Garde(Json(req)): Garde<Json<UpdateSampleRequest>>,
+) -> AppResult<StatusCode> {
+    let update_sample = UpdateSampleRequestWithIds::new(id, req);
+    let sample_repository: &dyn SampleRepository = registry.module.resolve_ref();
+    sample_repository.update(update_sample.into()).await?;
+    Ok(StatusCode::NO_CONTENT)
 }
