@@ -16,6 +16,7 @@ garde.workspace = true
 axum-valid.workspace = true
 shaku.workspace = true
 derive-new.workspace = true
+tracing.workspace = true
 
 [dev-dependencies]
 rstest.workspace = true

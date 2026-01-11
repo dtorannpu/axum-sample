@@ -12,3 +12,4 @@ thiserror.workspace = true
 sqlx.workspace = true
 garde.workspace = true
 anyhow.workspace = true
+strum.workspace = true
