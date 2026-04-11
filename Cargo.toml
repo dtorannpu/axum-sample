@@ -41,7 +41,7 @@ derive-new = { version = "0.7.0", default-features = false }
 sqlx = { version = "0.8", features = ["runtime-tokio", "postgres"] }
 thiserror = { version = "2.0.18" }
 mockall = "0.14.0"
-strum = { version = "0.27.2", features = ["derive"] }
+strum = { version = "0.28.0", features = ["derive"] }
 
 [dependencies]
 adapter.workspace = true
