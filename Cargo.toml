@@ -23,7 +23,7 @@ async-trait = { version = "0.1.89" }
 anyhow = { version = "1.0.102", default-features = false }
 axum = { version = "0.8.9", features = ["http1", "tokio", "macros"], default-features = false }
 opentelemetry = { version = "0.31.0", default-features = false }
-opentelemetry_sdk = { version = "0.31.0", default-features = false }
+opentelemetry_sdk = { version = "0.32.0", default-features = false }
 tokio = { version = "1.52.3", features = ["rt-multi-thread", "signal"] }
 tracing = { version = "0.1.44", default-features = false }
 tracing-opentelemetry = { version = "0.32.1", default-features = false }
