@@ -38,7 +38,7 @@ garde = { version = "0.22.1", features = ["derive", "email"] }
 axum-valid = { version = "0.24.0", default-features = false, features = ["garde", "json", "into_json"] }
 shaku = { version = "0.6.2", features = ["derive"] }
 derive-new = { version = "0.7.0", default-features = false }
-sqlx = { version = "0.8", features = ["runtime-tokio", "postgres"] }
+sqlx = { version = "0.9", features = ["runtime-tokio", "postgres"] }
 thiserror = { version = "2.0.18" }
 mockall = "0.14.0"
 strum = { version = "0.28.0", features = ["derive"] }
