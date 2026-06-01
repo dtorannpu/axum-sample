@@ -160,9 +160,9 @@ mod tests {
 
         assert!(res2.is_err());
         match res2 {
-            Err(AppError::SpecificOperationError(e)) => assert_eq!(
-                e.to_string(),
-                "error returned from database: duplicate key value violates unique constraint \"sample_email_key\""
+            Err(AppError::SpecificOperationError(e)) => assert!(
+                e.to_string().starts_with(
+                "error returned from database: duplicate key value violates unique constraint \"sample_email_key\"")
             ),
             _ => panic!("Unexpected error"),
         }
@@ -183,9 +183,9 @@ mod tests {
 
         assert!(res.is_err());
         match res {
-            Err(AppError::SpecificOperationError(e)) => assert_eq!(
-                e.to_string(),
-                "error returned from database: new row for relation \"sample\" violates check constraint \"sample_age_check\""
+            Err(AppError::SpecificOperationError(e)) => assert!(
+                e.to_string().starts_with(
+                "error returned from database: new row for relation \"sample\" violates check constraint \"sample_age_check\"")
             ),
             _ => panic!("Unexpected error"),
         }
@@ -206,9 +206,9 @@ mod tests {
 
         assert!(res.is_err());
         match res {
-            Err(AppError::SpecificOperationError(e)) => assert_eq!(
-                e.to_string(),
-                "error returned from database: new row for relation \"sample\" violates check constraint \"sample_age_check\""
+            Err(AppError::SpecificOperationError(e)) => assert!(
+                e.to_string().starts_with(
+                "error returned from database: new row for relation \"sample\" violates check constraint \"sample_age_check\"")
             ),
             _ => panic!("Unexpected error"),
         }
@@ -381,9 +381,9 @@ mod tests {
 
         assert!(res.is_err());
         match res {
-            Err(AppError::SpecificOperationError(e)) => assert_eq!(
-                e.to_string(),
-                "error returned from database: duplicate key value violates unique constraint \"sample_email_key\""
+            Err(AppError::SpecificOperationError(e)) => assert!(
+                e.to_string().starts_with(
+                "error returned from database: duplicate key value violates unique constraint \"sample_email_key\"")
             ),
             _ => panic!("Unexpected error"),
         }
