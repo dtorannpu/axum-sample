@@ -40,7 +40,7 @@ shaku = { version = "0.6.2", features = ["derive"] }
 derive-new = { version = "0.7.0", default-features = false }
 sqlx = { version = "0.9.0", features = ["runtime-tokio", "postgres"] }
 thiserror = { version = "2.0.18" }
-mockall = { version = "0.14.0" }
+mockall = { version = "0.15.0" }
 strum = { version = "0.28.0", features = ["derive"] }
 
 [dependencies]
