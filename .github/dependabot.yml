@@ -13,6 +13,12 @@ updates:
       default-days: 7
     assignees:
       - "dtorannpu"
+    groups:
+      opentelemetry:
+        patterns:
+          - "opentelemetry"
+          - "opentelemetry-*"
+          - "opentelemetry_*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
