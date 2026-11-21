@@ -22,7 +22,7 @@ jobs:
           rustup toolchain install stable
 
       - name: Install cargo-related tool
-        uses: taiki-e/install-action@v2.90.2
+        uses: taiki-e/install-action@v2.90.4
         with:
           tool: nextest,cargo-make,cargo-machete
 
